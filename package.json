@@ -1,0 +1,15 @@
+{
+  "main": "lib/binding.js",
+  "dependencies": {
+    "node-addon-api": "^1.1.0"
+  },
+  "scripts": {
+    "test": "node --napi-modules ./test/test_binding.js"
+  },
+  "gypfile": true,
+  "name": "napi-mix-v8",
+  "version": "1.0.0",
+  "description": "PoC in order to check ABI compatiblity mixing v8 GC calls and N-API",
+  "author": "julio.gonzalez@datadoghq.com",
+  "license": "ISC"
+}
