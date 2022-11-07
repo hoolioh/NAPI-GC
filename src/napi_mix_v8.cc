@@ -1,20 +1,22 @@
-#include <iostream>
+/**
+* Unless explicitly stated otherwise all files in this repository are licensed under the Apache-2.0 License.
+* This product includes software developed at Datadog (https://www.datadoghq.com/). Copyright 2022 julio.gzlez@gmail.com.
+**/
 #include <napi.h>
 #include <v8.h>
+#include <iostream>
 #include <map>
 #include <vector>
 
-using namespace Napi;
-
 Napi::ObjectReference* _ref = nullptr;
 
-#define ASSIGN_REF(ref,new)  do {                                       \
-                                if (ref) {                              \
-                                    ref->Reset();                       \
-                                    delete ref;                         \
-                                }                                       \
-                                ref = new;                              \
-                            } while(0);
+#define ASSIGN_REF(ref, new_ref)    do {                                        \
+                                        if (ref) {                              \
+                                            ref->Reset();                       \
+                                            delete ref;                         \
+                                        }                                       \
+                                        ref = new_ref;                          \
+                                    } while (0);
 
 #define CLEAN_REF(ref)  do {                                            \
                             if (ref && ref->Value().IsUndefined()) {    \
@@ -22,7 +24,7 @@ Napi::ObjectReference* _ref = nullptr;
                                 delete ref;                             \
                                 ref = nullptr;                          \
                             }                                           \
-                        } while(0);
+                        } while (0);
 
 
 void collectReferences(v8::Isolate *isolate, v8::GCType type, v8::GCCallbackFlags flags) {
@@ -43,7 +45,7 @@ void collectReferences(v8::Isolate *isolate, v8::GCType type, v8::GCCallbackFlag
 Napi::String Greet(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
 
-    //Greet
+    // Greet
     return Napi::String::New(env, "Hello world!");
 }
 
@@ -64,7 +66,6 @@ Napi::Value Track(const Napi::CallbackInfo& info) {
     ASSIGN_REF(_ref, ref);
 
     return env.Null();
-
 }
 
 Napi::Value Check(const Napi::CallbackInfo& info) {
@@ -81,7 +82,6 @@ Napi::Value Check(const Napi::CallbackInfo& info) {
     } else {
         return Napi::Boolean::New(env, true);
     }
-
 }
 
 Napi::Value SetCallback(const Napi::CallbackInfo& info) {
