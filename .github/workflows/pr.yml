@@ -1,0 +1,37 @@
+name: Pull-Request
+
+on:
+  pull-request:
+
+jobs:
+  build:
+    needs:
+      - cpplint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm ci
+
+  test:
+    needs:
+      - cpplint
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm test
+
+  cpplint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+      - run: pip install cpplint
+      - run: cpplint --filter=-build/include_subdir --linelength=120 --recursive ./src
+
