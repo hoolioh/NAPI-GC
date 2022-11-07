@@ -1,7 +1,7 @@
 name: Pull-Request
 
 on:
-  pull-request:
+  pull_request:
 
 jobs:
   build:
@@ -25,6 +25,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+      - run: npm ci
       - run: npm test
 
   cpplint:
