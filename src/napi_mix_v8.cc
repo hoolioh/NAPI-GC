@@ -14,18 +14,19 @@ Napi::ObjectReference* _ref = nullptr;
                                     delete ref;                         \
                                 }                                       \
                                 ref = new;                              \
-                            } while(0);                                         
-                                
+                            } while(0);
+
 #define CLEAN_REF(ref)  do {                                            \
                             if (ref && ref->Value().IsUndefined()) {    \
                                 ref->Reset();                           \
                                 delete ref;                             \
                                 ref = nullptr;                          \
                             }                                           \
-                        } while(0);                                         
+                        } while(0);
 
 
 void collectReferences(v8::Isolate *isolate, v8::GCType type, v8::GCCallbackFlags flags) {
+    std::cout << "Collecting references" << std::endl;
     switch (type) {
         case v8::GCType::kGCTypeScavenge:
             CLEAN_REF(_ref);
@@ -39,10 +40,11 @@ void collectReferences(v8::Isolate *isolate, v8::GCType type, v8::GCCallbackFlag
     }
 }
 
-Napi::String Method(const Napi::CallbackInfo& info) {
+Napi::String Greet(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
 
-    return Napi::String::New(env, "world");
+    //Greet
+    return Napi::String::New(env, "Hello world!");
 }
 
 Napi::Value Track(const Napi::CallbackInfo& info) {
@@ -91,8 +93,8 @@ Napi::Value SetCallback(const Napi::CallbackInfo& info) {
 }
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
-    exports.Set(Napi::String::New(env, "World"),
-            Napi::Function::New(env, Method));
+    exports.Set(Napi::String::New(env, "Greet"),
+            Napi::Function::New(env, Greet));
 
     exports.Set(Napi::String::New(env, "Track"),
             Napi::Function::New(env, Track));
